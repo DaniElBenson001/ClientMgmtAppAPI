@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMgmtAppAPI", "ClientM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMgmtAppAPI.Common", "ClientMgmtAppAPI.Common\ClientMgmtAppAPI.Common.csproj", "{62EB6A0D-C014-428E-A9D1-1067B2A4655D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMgmtAppAPI.Model", "ClientMgmtAppAPI.Model\ClientMgmtAppAPI.Model.csproj", "{A16C73F1-2372-4DEA-B3E3-B54C2AAD3D91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMgmtAppAPI.Models", "ClientMgmtAppAPI.Model\ClientMgmtAppAPI.Models.csproj", "{A16C73F1-2372-4DEA-B3E3-B54C2AAD3D91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMgmtAppAPI.Services", "ClientMgmtAppAPI.Services\ClientMgmtAppAPI.Services.csproj", "{E707B474-6174-4E5E-ABE2-8C319B097831}"
 EndProject

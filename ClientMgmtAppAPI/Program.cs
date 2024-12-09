@@ -6,6 +6,9 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using ClientMgmtAppAPI.Services.IServices;
+using ClientMgmtAppAPI.Services.Services;
+using ClientMgmtAppAPI.Services.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

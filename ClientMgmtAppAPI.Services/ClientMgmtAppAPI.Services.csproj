@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientMgmtAppAPI.Common\ClientMgmtAppAPI.Common.csproj" />
-    <ProjectReference Include="..\ClientMgmtAppAPI.Model\ClientMgmtAppAPI.Model.csproj" />
+    <ProjectReference Include="..\ClientMgmtAppAPI.Model\ClientMgmtAppAPI.Models.csproj" />
   </ItemGroup>
 
 </Project>
