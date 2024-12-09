@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ClientMgmtAppAPI.Common\ClientMgmtAppAPI.Common.csproj" />
     <ProjectReference Include="..\ClientMgmtAppAPI.Model\ClientMgmtAppAPI.Model.csproj" />
-    <ProjectReference Include="..\ClientMgmtAppAPI.Services\ClientMgmtAppAPI.Services.csproj" />
   </ItemGroup>
 
 </Project>
