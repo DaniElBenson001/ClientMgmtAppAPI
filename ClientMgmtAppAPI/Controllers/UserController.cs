@@ -25,7 +25,7 @@ namespace ClientMgmtAppAPI.Controllers
             return Ok(res);
         }
 
-        [HttpGet(ApiRoutes.Version + ApiRoutes.Users.Base + ApiRoutes.Users.GetInfo), Authorize]
+        [HttpGet(ApiRoutes.Version + ApiRoutes.Users.Base), Authorize]
         public async Task<IActionResult> GetUserInfo()
         {
             var res = await _userService.GetUserInfo();

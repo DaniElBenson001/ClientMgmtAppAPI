@@ -106,7 +106,7 @@ namespace ClientMgmtAppAPI.Services.Services
                     .FirstOrDefaultAsync();
 
                 infoResponse.Status = true;
-                infoResponse.StatusMessage = Messages.ErrorMessage.BaseError;
+                infoResponse.StatusMessage = Messages.SuccessMessage.BaseSuccess;
                 infoResponse.Data = userData;
                 return infoResponse;
             }
