@@ -8,9 +8,20 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using ClientMgmtAppAPI.Services.IServices;
 using ClientMgmtAppAPI.Services.Services;
-using ClientMgmtAppAPI.Services.Data;
+using ClientMgmtAppAPI.Services.Data; 
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Configuring Logging System
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.json", 
+        rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {Exception}")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
@@ -23,7 +34,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
-    {
+    { 
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateLifetime = true,

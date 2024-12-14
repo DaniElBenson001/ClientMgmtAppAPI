@@ -5,6 +5,7 @@ using ClientMgmtAppAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,14 @@ namespace ClientMgmtAppAPI.Services.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _context;
+        private readonly ILogger<SearchService> _logger;
 
-        public SearchService(IHttpContextAccessor httpContextAccessor, DataContext context)
+        public SearchService(IHttpContextAccessor httpContextAccessor, DataContext context, ILogger<SearchService> logger)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+
         }
 
         public async Task<DataResponse<SearchResultDTO<List<ClientDTO>>>> SearchClient(SearchRequestDTO request)
@@ -42,6 +46,7 @@ namespace ClientMgmtAppAPI.Services.Services
                 {
                     searchResponse.Status = false;
                     searchResponse.StatusMessage = Messages.ErrorMessage.UserNotFound;
+                    _logger.LogWarning($"User Context is Null; {Messages.ErrorMessage.UserNotFound}");
                     return searchResponse;
                 }
 
@@ -91,7 +96,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 searchResponse.Status = false;
                 searchResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                searchResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
                 return searchResponse;
             }
         }

@@ -6,14 +6,8 @@ using ClientMgmtAppAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace ClientMgmtAppAPI.Services.Services
 {
@@ -21,11 +15,13 @@ namespace ClientMgmtAppAPI.Services.Services
     {
         private readonly DataContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<ClientService> _logger;
 
-        public ClientService(IHttpContextAccessor httpContextAccessor, DataContext context)
+        public ClientService(IHttpContextAccessor httpContextAccessor, DataContext context, ILogger<ClientService> logger)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public async Task<DataResponse<string>> CreateClient(InputClientDTO request)
@@ -45,6 +41,7 @@ namespace ClientMgmtAppAPI.Services.Services
                 {
                     clientResponse.Status = false;
                     clientResponse.StatusMessage = Messages.ErrorMessage.UserNotFound;
+                    _logger.LogWarning($"User Context is Null; {Messages.ErrorMessage.UserNotFound}");
                     return clientResponse;
                 }
 
@@ -71,7 +68,6 @@ namespace ClientMgmtAppAPI.Services.Services
                     PaymentTerms = request.PaymentTerms,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
-
                 };
 
                 await _context.AddAsync(clientData);
@@ -85,7 +81,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 clientResponse.Status = false;
                 clientResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                clientResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.Message} ||| {ex.StackTrace}");
             }
             return clientResponse;
         }
@@ -133,7 +129,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 clientResponse.Status = false;
                 clientResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                clientResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
             }
 
             return clientResponse;
@@ -189,7 +185,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 clientResponse.Status = false;
                 clientResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                clientResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
                 return clientResponse;
             }
         }
@@ -203,8 +199,8 @@ namespace ClientMgmtAppAPI.Services.Services
             try
             {
                 if (userHttpAccessor == null ||
-             !int.TryParse(userHttpAccessor.User.FindFirstValue(ClaimTypes.NameIdentifier), out int userID) ||
-             userID == 0)
+                 !int.TryParse(userHttpAccessor.User.FindFirstValue(ClaimTypes.NameIdentifier), out int userID) ||
+                 userID == 0)
                 {
                     clientResponse.Status = false;
                     clientResponse.StatusMessage = Messages.ErrorMessage.UserNotFound;
@@ -242,9 +238,9 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 clientResponse.Status = false;
                 clientResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                clientResponse.ErrorMessage = $"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
+                return clientResponse;
             }
-            return clientResponse;
         }
      }
 }

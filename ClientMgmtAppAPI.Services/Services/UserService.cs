@@ -6,6 +6,7 @@ using ClientMgmtAppAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace ClientMgmtAppAPI.Services.Services
     {
         private readonly DataContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(DataContext context, IHttpContextAccessor httpContextAccessor)
+        public UserService(DataContext context, IHttpContextAccessor httpContextAccessor, ILogger<UserService> logger)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public async Task<DataResponse<string>> CreateUser(CreateUserDTO request)
@@ -71,7 +74,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 userResponse.Status = false;
                 userResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                userResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
             }
             return userResponse;
         }
@@ -88,6 +91,7 @@ namespace ClientMgmtAppAPI.Services.Services
                 {
                     infoResponse.Status = false;
                     infoResponse.StatusMessage = Messages.ErrorMessage.UserNotFound;
+                    _logger.LogWarning($"User Context is null, {Messages.ErrorMessage.UserNotFound}");
                     return infoResponse;
                 }
 
@@ -110,7 +114,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 infoResponse.Status = false;
                 infoResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                infoResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
             }
             return infoResponse;
         }

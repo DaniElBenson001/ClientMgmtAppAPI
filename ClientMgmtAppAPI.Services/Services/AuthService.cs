@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,13 @@ namespace ClientMgmtAppAPI.Services.Services
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(DataContext context, IConfiguration configuration)
+        public AuthService(DataContext context, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _context = context;
             _configuration = configuration;
-
+            _logger = logger;
         }
 
         public async Task<DataResponse<LoginTokenDTO>> Login(UserLoginDTO request)
@@ -44,6 +46,7 @@ namespace ClientMgmtAppAPI.Services.Services
                 {
                     loginResponse.Status = false;
                     loginResponse.StatusMessage = Messages.ErrorMessage.UserNotFound;
+                    _logger.LogWarning($"User is null, {Messages.ErrorMessage.UserNotFound}");
                     return loginResponse;
                 }
 
@@ -76,7 +79,7 @@ namespace ClientMgmtAppAPI.Services.Services
             {
                 loginResponse.Status = false;
                 loginResponse.StatusMessage = Messages.ErrorMessage.BaseError;
-                loginResponse.ErrorMessage = $"{ex.Message} ||| {ex.StackTrace} ||| {DateTime.UtcNow}";
+                _logger.LogError($"{ex.GetType().Name}: {ex.Message} ||| {ex.StackTrace}");
             }
 
             return loginResponse;
