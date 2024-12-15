@@ -12,6 +12,7 @@ namespace ClientMgmtAppAPI.Common.Constants
         {
             public const string BaseError = "Oops, An Error Occurred; It isn't your Fault!";
 
+            public const string ValidationError = "Oops, Validation Failed";
             public const string NullOrNoSearch = "Oops, Kindly input a Search";
 
             public const string UserNotFound = "Oops, User Not Found";
@@ -48,6 +49,27 @@ namespace ClientMgmtAppAPI.Common.Constants
         public static class WarningMessage
         {
 
+        }
+
+        public static class ValidatorMessage
+        {
+            public const string Required = "This is Required!";
+            public const string EmailAddressError = "Invalid Email Format";
+
+            public static string MinLengthError(string fieldName, int minLength)
+            {
+                return $"Please enter at Least {minLength} characters for {fieldName}";
+            }
+
+            public static string MaxLengthError(string fieldName, int maxLength)
+            {
+                return $"Please enter at Most {maxLength} characters for {fieldName}";
+            }
+
+            public static string LengthError(string fieldName, int length)
+            {
+                return $"Please enter {length} digits for {fieldName}";
+            }
         }
     }
 }

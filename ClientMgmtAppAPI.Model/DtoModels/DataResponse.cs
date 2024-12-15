@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ClientMgmtAppAPI.Common.Utils.ValidationErrorExtractor;
 
 namespace ClientMgmtAppAPI.Models.DtoModels
 {
@@ -11,6 +12,6 @@ namespace ClientMgmtAppAPI.Models.DtoModels
         public bool Status { get; set; }
         public string? StatusMessage { get; set; }
         public T? Data { get; set; }
-        public string? ErrorMessage { get; set; }
+        public List<ValidationErrorDTO>? ValidationErrors { get; set; }
     }
 }

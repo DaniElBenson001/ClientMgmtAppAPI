@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,17 +11,22 @@ using ClientMgmtAppAPI.Services.IServices;
 using ClientMgmtAppAPI.Services.Services;
 using ClientMgmtAppAPI.Services.Data; 
 using Serilog;
+using FluentValidation.AspNetCore;
+using ClientMgmtAppAPI.Models.Validations;
+using ClientMgmtAppAPI.Models.DtoModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Configuring Logging System
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
+Log.Logger = new LoggerConfiguration() 
+    .WriteTo.Console()  
     .WriteTo.File("Logs/log-.json", 
         rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-builder.Host.UseSerilog(); 
+builder.Host.UseSerilog();
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
@@ -62,6 +68,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<IValidator<CreateUserDTO>, UserValidator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IClientService, ClientService>();
